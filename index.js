@@ -19,8 +19,6 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-  //   console.log(req);
-
   res.status(200).send("<h1>Hello World. This is my first Backend</h1>");
 });
 
@@ -50,6 +48,21 @@ app.get(
   },
   (req, res) => {
     res.send("Welcome to dashboard.");
+  }
+);
+
+app.get(
+  "/beer-barn",
+  (req, res, next) => {
+    let age = 7;
+
+    if (age > 21) {
+      return next();
+    }
+    res.send("<h1>OOOOPPSS!!! YOU CAN'T DRINK AT OUR BAR.</h1>");
+  },
+  (req, res) => {
+    res.send("<h1>HURRAY!!! YOU CAN DRINK AT OUR BAR.</h1>");
   }
 );
 

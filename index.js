@@ -10,7 +10,7 @@ app.use((req, res, next) => {
   console.log(date);
   console.log(req.url);
 
-  let hour = 19;
+  let hour = 12;
   if (hour < 17) {
     return next();
   }
@@ -37,6 +37,27 @@ app.get("/register", (req, res) => {
   });
 });
 
+app.get(
+  "/admin-dashboard",
+  (req, res, next) => {
+    let userType = "user";
+
+    if (userType === "admin") {
+      return next();
+    }
+
+    res.send("<h2>No Access</h2>");
+  },
+  (req, res) => {
+    res.send("Welcome to dashboard.");
+  }
+);
+
+app.get("/login", (req, res) => {
+  res.send("Logged in.");
+});
+
+// Listening to server
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

@@ -2,6 +2,17 @@ import express from "express";
 const app = express();
 const port = 3000;
 
+import morgan from "morgan";
+import fs from "fs";
+
+// Example of third party middleware
+// app.use(morgan("tiny"));
+// app.use(morgan("combined"));
+app.use(morgan("dev"));
+
+// Example using Built-in middleware
+app.use(express.json());
+
 // Application Middleware must come first before any other route.
 app.use((req, res, next) => {
   //   console.log("Time:", Date.minute());
@@ -15,18 +26,21 @@ app.use((req, res, next) => {
     return next();
   }
 
-  res.send("We have closed for the day");
+  res.status(300).send("We have closed for the day");
 });
 
 app.get("/", (req, res) => {
-  res.status(200).send("<h1>Hello World. This is my first Backend</h1>");
+  const fileContent = fs.readFileSync("public/index.html", "utf-8");
+  res.status(200).send(fileContent);
 });
 
 app.get("/contact", (req, res) => {
-  res.status(204).send("You can contact me on instagram");
+  res.status(204).send("You can contact me on instagram.");
 });
 
 app.get("/register", (req, res) => {
+  console.log(req.body);
+
   res.status(201).json({
     name: "Chima",
     married: false,
@@ -68,6 +82,13 @@ app.get(
 
 app.get("/login", (req, res) => {
   res.send("Logged in.");
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.log(err);
+
+  res.status(500).send("Sorry an internal Error occured");
 });
 
 // Listening to server
